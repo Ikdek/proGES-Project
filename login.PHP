@@ -1,69 +1,3 @@
-<?php
-session_start();
-
-include 'users.php';
-
-function verifierConnexion($pseudo, $password)
-{
-  global $myUsers;
-  foreach ($myUsers as $user) {
-    if ($user['pseudo'] === $pseudo && $user['password'] === $password) {
-      $_SESSION['connected'] = true;
-      $_SESSION['pseudo'] = $pseudo;
-      return true;
-    }
-  }
-  return false;
-}
-
-function missMatch()
-{
-  return "display=block";
-};
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_POST['login-username']) && isset($_POST['login-passwd'])) {
-    ?>
-    <script>
-      var submitButton = document.querySelector("#btn-submit");
-      submitButton.classList.add("loading");
-    </script>
-    <?php
-    $pseudo = $_POST['login-username'];
-    $password = $_POST['login-passwd'];
-    if (verifierConnexion($pseudo, $password)) {
-      ?>
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          var submitButton = document.querySelector("#btn-submit");
-          var submitButtonText = document.querySelector("#btn-submit .button-text");
-          setTimeout(function () {
-            submitButton.classList.remove("loading");
-            submitButton.classList.add("success");
-            submitButtonText.innerHTML = "Connexion Réussie";
-            setTimeout(function () {
-              <?php 
-                header('location: index.php')
-                ?>
-            }, 1000);
-          }, 1000);
-        });
-      </script>
-      <?php 
-    } else {
-      $erreur = "Identifiant ou mot de passe incorrect.";
-      echo $erreur;
-    }
-  }
-}
-
-if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
-  session_unset();
-  session_destroy();
-  header("Location: login.php");
-  exit();
-}
-?>
 
 
 <!DOCTYPE html>
@@ -83,7 +17,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
         <hggroup>
           <h1>Bienvenue, sur ProGES</h1>
           <h2>Connectez-vous à votre compte.</h2>
-          <p hidden <?php if (verifierConnexion($pseudo, $password)!= true) missMatch();?>>Identifiant ou Mot De Passe Incorrecte.</p>
+          <?php if (!empty($erreur)) : ?>
+            <p><?php echo $erreur; ?></p>
+          <?php endif; ?>
         </hggroup>
         <div>
           <input type="text" name="login-username" id="login-username" required>
@@ -111,3 +47,62 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
 </body>
 
 </html>
+<?php
+session_start();
+
+include 'users.php';
+
+function verifierConnexion($pseudo, $password)
+{
+  global $myUsers;
+  foreach ($myUsers as $user) {
+    if ($user['pseudo'] === $pseudo && $user['password'] === $password) {
+      $_SESSION['connected'] = true;
+      $_SESSION['pseudo'] = $pseudo;
+      $_SESSION['role'] = $user['role'];
+      return true;
+    }
+  }
+  return false;
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_POST['login-username']) && isset($_POST['login-passwd'])) {
+    ?>
+    <script>
+      var submitButton = document.querySelector("#btn-submit");
+      submitButton.classList.add("loading");
+    </script>
+    <?php
+    $pseudo = $_POST['login-username'];
+    $password = $_POST['login-passwd'];
+    if (verifierConnexion($pseudo, $password)) {
+      ?>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          var submitButton = document.querySelector("#btn-submit");
+          var submitButtonText = document.querySelector("#btn-submit .button-text");
+          setTimeout(function () {
+            submitButton.classList.remove("loading");
+            submitButton.classList.add("success");
+            submitButtonText.innerHTML = "Connexion Réussie";
+            setTimeout(function () {
+              window.location.href = "index.php"; 
+            }, 1000);
+          }, 1000);
+        });
+      </script>
+      <?php 
+    } else {
+      $erreur = "Identifiant ou mot de passe incorrect.";
+      ?>
+      <script>
+      submitButton.classList.remove("loading");
+      </script>
+      <?php
+    }
+  }
+}
+?>
+
