@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+    --bg-light: #f7f9fe;
+    --bg-dark: #313540;
+    --bg-darker: #151b2d;
+    --font-body: #555563;
+    --shadow: #c1c3c9;
+    --card-width: 320px;
+    --card-border-radius: 24px;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background-color: var(--bg-light);
+}
+
+.tpn_card {
+    background: white;
+    padding: 1.4em;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+    border-radius: var(--card-border-radius);
+    width: var(--card-width);
+    margin: 0.8em;
+}
+
+.tpn_card img {
+    border-radius: var(--card-border-radius);
+    box-shadow: 1px 7px 13px var(--shadow);
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 1em;
+}
+
+.tpn_card h5 {
+    color: var(--bg-dark);
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.tpn_card p {
+    color: var(--font-body);
+    font-weight: 400;
+    text-align: center;
+}
+
+.newsCards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em;
+    padding: 2em;
+    margin-bottom: 2em;
+}
+
+.newsCards a {
+    text-decoration: none;
+    color: var(--bg-dark);
+}
+
+.newsCards a:hover {
+    color: var(--bg-darker);
+}

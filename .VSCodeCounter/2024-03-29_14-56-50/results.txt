@@ -1,0 +1,70 @@
+Date : 2024-03-29 14:56:50
+Directory : c:\laragon\www\proGES-Project
+Total : 42 files,  1868 codes, 1 comments, 307 blanks, all 2176 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| PHP        |         25 |      1,057 |          0 |        174 |      1,231 |
+| CSS        |         16 |        773 |          1 |        129 |        903 |
+| JavaScript |          1 |         38 |          0 |          4 |         42 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                     |         42 |      1,868 |          1 |        307 |      2,176 |
+| . (Files)                                             |         26 |      1,095 |          0 |        178 |      1,273 |
+| STYLE                                                 |         16 |        773 |          1 |        129 |        903 |
++-------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                              | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\laragon\www\proGES-Project\STYLE\addClasses.css    | CSS        |         25 |          0 |          4 |         29 |
+| c:\laragon\www\proGES-Project\STYLE\addMark.css       | CSS        |         25 |          0 |          4 |         29 |
+| c:\laragon\www\proGES-Project\STYLE\admin.css         | CSS        |         23 |          0 |          2 |         25 |
+| c:\laragon\www\proGES-Project\STYLE\classesManage.css | CSS        |         42 |          0 |          8 |         50 |
+| c:\laragon\www\proGES-Project\STYLE\deleteClasses.css | CSS        |          0 |          0 |          1 |          1 |
+| c:\laragon\www\proGES-Project\STYLE\editUser.css      | CSS        |         28 |          0 |          4 |         32 |
+| c:\laragon\www\proGES-Project\STYLE\index.css         | CSS        |         55 |          0 |          9 |         64 |
+| c:\laragon\www\proGES-Project\STYLE\login.css         | CSS        |        163 |          0 |         28 |        191 |
+| c:\laragon\www\proGES-Project\STYLE\marks.css         | CSS        |         37 |          0 |          6 |         43 |
+| c:\laragon\www\proGES-Project\STYLE\modifyClasses.css | CSS        |         25 |          0 |          4 |         29 |
+| c:\laragon\www\proGES-Project\STYLE\navbar.css        | CSS        |         98 |          0 |         18 |        116 |
+| c:\laragon\www\proGES-Project\STYLE\navbarAdmin.css   | CSS        |         97 |          0 |         16 |        113 |
+| c:\laragon\www\proGES-Project\STYLE\newsCreate.css    | CSS        |         38 |          0 |          5 |         43 |
+| c:\laragon\www\proGES-Project\STYLE\plannings.css     | CSS        |         45 |          0 |          5 |         50 |
+| c:\laragon\www\proGES-Project\STYLE\selectClasses.css | CSS        |         25 |          0 |          4 |         29 |
+| c:\laragon\www\proGES-Project\STYLE\usersManage.css   | CSS        |         47 |          1 |         11 |         59 |
+| c:\laragon\www\proGES-Project\addClasses.php          | PHP        |         27 |          0 |          7 |         34 |
+| c:\laragon\www\proGES-Project\addMark.php             | PHP        |         35 |          0 |          8 |         43 |
+| c:\laragon\www\proGES-Project\addSubject.php          | PHP        |         27 |          0 |          7 |         34 |
+| c:\laragon\www\proGES-Project\admin.php               | PHP        |         26 |          0 |          5 |         31 |
+| c:\laragon\www\proGES-Project\classesManage.php       | PHP        |         36 |          0 |          5 |         41 |
+| c:\laragon\www\proGES-Project\createUser.php          | PHP        |         70 |          0 |          7 |         77 |
+| c:\laragon\www\proGES-Project\db.php                  | PHP        |          7 |          0 |          0 |          7 |
+| c:\laragon\www\proGES-Project\deconnexion.php         | PHP        |          7 |          0 |          4 |         11 |
+| c:\laragon\www\proGES-Project\deleteClasses.php       | PHP        |         26 |          0 |          3 |         29 |
+| c:\laragon\www\proGES-Project\deleteUser.php          | PHP        |         19 |          0 |         12 |         31 |
+| c:\laragon\www\proGES-Project\editMark.php            | PHP        |         38 |          0 |          4 |         42 |
+| c:\laragon\www\proGES-Project\editUser.php            | PHP        |         78 |          0 |         14 |         92 |
+| c:\laragon\www\proGES-Project\globalView.php          | PHP        |        121 |          0 |         20 |        141 |
+| c:\laragon\www\proGES-Project\index.php               | PHP        |         50 |          0 |         13 |         63 |
+| c:\laragon\www\proGES-Project\marks.php               | PHP        |         44 |          0 |          7 |         51 |
+| c:\laragon\www\proGES-Project\modifyClasses.php       | PHP        |         34 |          0 |          6 |         40 |
+| c:\laragon\www\proGES-Project\nav.php                 | PHP        |         19 |          0 |          2 |         21 |
+| c:\laragon\www\proGES-Project\navbar.js               | JavaScript |         38 |          0 |          4 |         42 |
+| c:\laragon\www\proGES-Project\newsCreate.php          | PHP        |         48 |          0 |          5 |         53 |
+| c:\laragon\www\proGES-Project\permCheck.php           | PHP        |         24 |          0 |          4 |         28 |
+| c:\laragon\www\proGES-Project\planningManager.php     | PHP        |         92 |          0 |         12 |        104 |
+| c:\laragon\www\proGES-Project\plannings.php           | PHP        |         96 |          0 |          8 |        104 |
+| c:\laragon\www\proGES-Project\saveMark.php            | PHP        |         10 |          0 |          3 |         13 |
+| c:\laragon\www\proGES-Project\selectClasses.php       | PHP        |         28 |          0 |          3 |         31 |
+| c:\laragon\www\proGES-Project\taskEdit.php            | PHP        |         43 |          0 |         10 |         53 |
+| c:\laragon\www\proGES-Project\usersManage.php         | PHP        |         52 |          0 |          5 |         57 |
+| Total                                                 |            |      1,868 |          1 |        307 |      2,176 |
++-------------------------------------------------------+------------+------------+------------+------------+------------+

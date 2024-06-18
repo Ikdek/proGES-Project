@@ -4,63 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="index.css">
+    <title>ProGes - Accueil</title>
+    <link rel="stylesheet" href="STYLE/index.css">
 </head>
 
 <body>
     <?php
-    session_start();
-    function verifierConnexion($pseudo, $password)
+    require_once 'nav.php';
+    if (!isset($_SESSION["user_id"])) {
+        die("Veuillez vous connecter d'abord.");
+    }
+    $bdd = new PDO('mysql:host=localhost;dbname=progesdb;charset=utf8', 'root', '');
+
+    function fetchNewsData()
     {
-        global $myUsers;
-        foreach ($myUsers as $user) {
-            if ($user['pseudo'] === $pseudo && $user['password'] === $password) {
-                $_SESSION['connected'] = true;
-                $_SESSION['pseudo'] = $pseudo;
-                return true;
-            }
-        }
-        return false;
+        global $bdd;
+
+        $query = $bdd->query("SELECT * FROM news");
+        return $query->fetchAll();
     }
 
-    if (empty ($_SESSION)) {
-        header("Location: login.php");
-    }
-
+    $newsData = fetchNewsData();
     ?>
 
     <main>
-        <nav class='nav'>
-            <div class='logo'>ProGES</div>
-            <ul class='menu'>
-                <li><a href='index.php'>accueil</a></li>
-                <li><a href='plannings.php'>plannings</a></li>
-                <li><a href='adminNews.php'>uploadNews</a></li>
-                <li><a href='deconnexion.php'>déconnexion</a></li>
-            </ul>
-            <button class='hamburger'>
-                <span class='icon'></span>
-            </button>
-        </nav>
-        <h2>News</h2>
-        <?php
-        $donnees = file("newsData.txt");
-        $donnees = array_reverse($donnees);
-        ?>
+        <h1>Bienvenue sur ProGes</h1>
+        <p>Nous nous engageons à fournir un site RAPIDE a tout nos éléves</p><br><br>
+
+        <h2>Dernières actualitées :</h2>
         <div class="scrollmenu">
             <div class='newsCards'>
                 <?php
+                $newsData = fetchNewsData();
 
-                foreach ($donnees as $ligne) {
-                    $info = explode("|", $ligne);
-                    ?>
+                foreach ($newsData as $newsItem) { ?>
                     <div class='tpn_card'>
                         <?php
-                        echo "<h5>" . $info[0] . "</h5>";
-                        echo "<img src='" . $info[2] . "' alt='" . $info[0] . "' style='max-height: 300px;'><br>";
-                        echo "<p class='description'>" . $info[1] . "</p>";
+                        echo "<h5>" . $newsItem['title'] . "</h5>";
+                        echo "<img src='" . $newsItem['img'] . "' alt='" . $newsItem['title'] . "' style='max-height: 300px;'><br>";
+                        echo "<p class='description'>" . $newsItem['content'] . "</p>";
                         ?>
                     </div>
                     <?php
@@ -68,14 +50,13 @@
                 ?>
             </div>
         </div>
-        <?php
-        ?>
-        <div class='bgImg'></div>
+
+        <h2>À propos de notre école</h2>
+        <p>Notre école se consacre à la promotion de l'excellence dans tous les aspects de l'éducation. (Surtout en boisson) </p>
 
     </main>
 
     <script src="navbar.js"></script>
-
 
 </body>
 

@@ -1,5 +1,0 @@
-Gentle|Je suis une belle image d'une belle équipe|MEDIA/newsImg/channels4_profile.jpg
-Mashle|ccazeazeaccazeazeaccazeazeaccazeazeaccazeazeaccazeazea|MEDIA/newsImg/pp.jpg
-JS|Un language potable|MEDIA/newsImg/unnamed.png
-Lua|Un language de goat|MEDIA/newsImg/Lua-not-your-average-scripting-language-blog-hero.jpg
-PHP|no comment|MEDIA/newsImg/php-logo.png

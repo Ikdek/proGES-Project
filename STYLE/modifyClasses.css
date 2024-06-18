@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+form {
+    margin: 1em auto;
+    width: 80%;
+}
+
+label {
+    display: block;
+    margin: 0.5em 0;
+}
+
+input, button {
+    width: 100%;
+    padding: 0.5em;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.125em;
+    margin-top: 1em;
+    text-decoration: none;
+}

@@ -1,0 +1,116 @@
+:root {
+    --offset: -50px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.nav {
+    background-color: #4CAF50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    margin-bottom: 20px;
+}
+
+
+
+.nav .logo {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.nav .hamburger {
+    border: none;
+    width: 22px;
+    height: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.nav .hamburger .icon {
+    position: relative;
+    display: block;
+    width: inherit;
+    height: 3px;
+    background-color: black;
+}
+
+.nav .hamburger .icon::before,
+.nav .hamburger .icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    background-color: black;
+}
+
+.nav .hamburger .icon::before {
+    transform: translateY(-7px);
+}
+
+.nav .hamburger .icon::after {
+    transform: translateY(7px);
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    list-style-type: none;
+}
+
+.menu a {
+    position: relative;
+    font: 900 0.7rem helvetica, sans-serif;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: black;
+    transition: color 0.2s;
+}
+
+.menu a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.2rem;
+    width: 100%;
+    height: 3px;
+    background-color: black;
+    transform-origin: center;
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.animation .logo {
+    color: white;
+}
+
+.animation .menu {
+    display: grid;
+    opacity: 1;
+    background-color: black;
+    transition: background-color 0.5s;
+}
+
+.animation .menu a {
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .nav {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 601px) {
+    .hamburger {
+        display: none;
+    }
+}

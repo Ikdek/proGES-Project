@@ -6,8 +6,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="login.css">
-  <title>ProGES</title>
+  <link rel="stylesheet" href="STYLE/login.css">
+  <title>ProGes - Connexion</title>
 </head>
 
 <body>
@@ -30,7 +30,6 @@
           <input type="password" name="login-passwd" id="login-passwd" required>
           <label for="login-passwd">Mot De Passe</label>
         </div>
-        <a href="#" id="forgot-passwd">Mot De Passe oublié</a>
         <button type="submit" class=button id="btn-submit">
           <span class="button-text">Connexion</span>
           <div class="button-loader">
@@ -50,20 +49,30 @@
 <?php
 session_start();
 
-include 'users.php';
+$bdd = new PDO('mysql:host=localhost;dbname=progesdb;charset=utf8', 'root', '');
 
 function verifierConnexion($pseudo, $password)
 {
-  global $myUsers;
-  foreach ($myUsers as $user) {
-    if ($user['pseudo'] === $pseudo && $user['password'] === $password) {
-      $_SESSION['connected'] = true;
-      $_SESSION['pseudo'] = $pseudo;
-      $_SESSION['role'] = $user['role'];
-      return true;
+    global $bdd;
+
+    $hashed_pseudo = hash('sha256', $pseudo); // Hacher le pseudo avec la même méthode utilisée lors de la création de l'utilisateur
+
+    $query = $bdd->prepare("SELECT * FROM users WHERE login = :pseudo");
+    $query->bindValue(":pseudo", $hashed_pseudo, PDO::PARAM_STR);  // Lier le pseudo haché
+    $query->execute();
+    $user = $query->fetch();
+
+    // Vérifier le hachage du mot de passe
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['connected'] = true;
+        $_SESSION['pseudo'] = $pseudo;
+        $_SESSION['rank'] = $user['rank'];
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['class_id'] = $user['class_id'];
+        return true;
     }
-  }
-  return false;
+
+    return false;
 }
 
 
@@ -105,4 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 ?>
+
+
 
