@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  php-lint:
+    name: Lint PHP (syntaxe)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: pdo, pdo_mysql
+
+      - name: Vérifier la syntaxe de tous les fichiers PHP
+        run: |
+          error=0
+          while IFS= read -r -d '' file; do
+            if ! php -l "$file"; then
+              error=1
+            fi
+          done < <(find . -type f -iname '*.php' -not -path './vendor/*' -print0)
+          if [ "$error" -ne 0 ]; then
+            echo "::error::Des erreurs de syntaxe PHP ont été détectées."
+            exit 1
+          fi
+          echo "Tous les fichiers PHP ont une syntaxe valide."
+
+  sql-validation:
+    name: Valider le dump SQL
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: progesdb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Attendre que MySQL soit prêt
+        run: |
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -proot --silent; then
+              echo "MySQL est prêt."
+              exit 0
+            fi
+            echo "Attente de MySQL... ($i)"
+            sleep 2
+          done
+          echo "::error::MySQL n'a pas démarré à temps."
+          exit 1
+
+      - name: Importer le dump progesdb.sql
+        run: mysql -h 127.0.0.1 -P 3306 -uroot -proot progesdb < progesdb.sql
+
+      - name: Vérifier que les tables ont été créées
+        run: |
+          tables=$(mysql -h 127.0.0.1 -P 3306 -uroot -proot progesdb -N -e "SHOW TABLES;")
+          echo "Tables importées :"
+          echo "$tables"
+          if [ -z "$tables" ]; then
+            echo "::error::Aucune table trouvée après l'import du dump."
+            exit 1
+          fi
