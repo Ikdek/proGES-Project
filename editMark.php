@@ -1,6 +1,6 @@
 <?php
 require_once "permCheck.php";
-$bdd = new PDO('mysql:host=localhost;dbname=progesdb;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
 
 if (!empty($_GET['mark_id'])) {
     $mark_id = $_GET['mark_id'];
@@ -15,6 +15,7 @@ if (!empty($_GET['mark_id'])) {
             $updateQuery = $bdd->prepare("UPDATE marks SET mark = ? WHERE id = ?");
             $updateQuery->execute([$new_mark, $mark_id]);
             header("Location: globalView.php");
+            exit;
         }
     }
 }
@@ -27,7 +28,8 @@ if (!empty($_GET['mark_id'])) {
     <title>ProGes - Editer Notes</title>
     <link rel="stylesheet" href="style/editUser.css">
 </head>
-<body> 
+<body>
+    <?php require_once "navAdmin.php"; ?>
     <?php if(isset($mark)): ?>
     <form id="update_mark_form" action="" method="post">
         <label for="mark">Mark: </label>

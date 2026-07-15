@@ -1,10 +1,10 @@
 <?php
 require_once "permCheck.php";
 
-$host = 'localhost';
-$dbname = 'progesdb';
-$username = 'root';
-$password = '';
+$host = getenv('DB_HOST') ?: 'localhost';
+$dbname = getenv('DB_NAME') ?: 'progesdb';
+$username = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: '';
 
 
 $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -23,6 +23,7 @@ if (isset($_GET['id'])) {
     $stmt->execute();
     
     header("Location: usersManage.php");
+    exit;
 
 } else {
     echo "User ID not provided!";

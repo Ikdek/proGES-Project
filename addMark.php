@@ -17,6 +17,7 @@ $subjects->execute();
 </head>
 
 <body>
+    <?php require_once "navAdmin.php"; ?>
     <form method="POST" action="saveMark.php">
         <label for="user_id">Étudiant:</label>
         <select id="user_id" name="user_id" required>

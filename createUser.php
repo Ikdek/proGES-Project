@@ -1,9 +1,9 @@
 <?php
 require_once "permCheck.php";
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'progesdb';
+$host = getenv('DB_HOST') ?: 'localhost';
+$user = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: '';
+$database = getenv('DB_NAME') ?: 'progesdb';
 $conn = new PDO("mysql:host=$host;dbname=$database", $user, $password);
 
 function getClasses($conn) {
@@ -35,6 +35,7 @@ if (isset($_POST['create_user'])) {
     if (empty($login_error) && empty($password_error)) {
         createUser($conn, $login, $password, $firstName, $lastName, $classId);
         header('Location: usersManage.php?msg=Utilisateur créé avec succès!');
+        exit;
     }
 }
 
@@ -54,6 +55,7 @@ function createUser($conn, $login, $password, $firstName, $lastName, $classId) {
     <link rel="stylesheet" href="style/addClasses.css">
 </head>
 <body>
+<?php require_once "navAdmin.php"; ?>
 <form action="createUser.php" method="post">
     <label for="login">Nom d'Utilisateur:</label>
     <input type="text" name="login" id="login" value="<?php echo isset($login) ? $login : ''; ?>" required>

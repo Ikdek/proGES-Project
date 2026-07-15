@@ -1,3 +1,19 @@
+<?php
+require_once "permCheck.php";
+require_once "db.php";
+
+// Le traitement précède toute sortie HTML, sinon la redirection serait ignorée.
+if (isset($_POST['submit'])) {
+    $className = isset($_POST['className']) ? trim($_POST['className']) : '';
+
+    if (!empty($className)) {
+        $stmt = $conn->prepare("INSERT INTO classes (name) VALUES (?)");
+        $stmt->execute([$className]);
+        header('Location: classesManage.php');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,21 +21,7 @@
     <link rel="stylesheet" href="style/addClasses.css">
 </head>
 <body>
-    <?php
-    require_once "db.php";
-    require_once "permCheck.php";
-    
-    if (isset($_POST['submit'])) {
-        $className = isset($_POST['className']) ? trim($_POST['className']) : '';
-
-        if (!empty($className)) {
-            $stmt = $conn->prepare("INSERT INTO classes (name) VALUES (?)");
-            $stmt->execute([$className]);
-            header('Location: classesManage.php');
-            exit;
-        }
-    }
-    ?>
+    <?php require_once "navAdmin.php"; ?>
 
     <form action="" method="POST">
         <label for="className">Nom de la classe :</label>

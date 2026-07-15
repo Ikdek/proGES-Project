@@ -1,4 +1,6 @@
 <?php
+// Barre de navigation des pages d'administration.
+// Le contrôle d'accès est fait par permCheck.php, à inclure en haut de page.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -19,4 +21,5 @@ if (session_status() === PHP_SESSION_NONE) {
         <span class='icon'></span>
     </button>
 </nav>
-<link rel="stylesheet" href="STYLE/navbar.css">
+
+<link rel="stylesheet" href="STYLE/navbarAdmin.css">

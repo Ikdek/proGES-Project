@@ -1,5 +1,47 @@
+<?php
+// La logique doit s'exécuter AVANT toute sortie HTML : sinon session_start()
+// ne peut plus envoyer le cookie de session et la connexion ne persiste pas.
+session_start();
 
+$bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
 
+function verifierConnexion($pseudo, $password)
+{
+    global $bdd;
+
+    $hashed_pseudo = hash('sha256', $pseudo); // Hacher le pseudo avec la même méthode utilisée lors de la création de l'utilisateur
+
+    $query = $bdd->prepare("SELECT * FROM users WHERE login = :pseudo");
+    $query->bindValue(":pseudo", $hashed_pseudo, PDO::PARAM_STR);  // Lier le pseudo haché
+    $query->execute();
+    $user = $query->fetch();
+
+    // Vérifier le hachage du mot de passe
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['connected'] = true;
+        $_SESSION['pseudo'] = $pseudo;
+        $_SESSION['rank'] = $user['rank'];
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['class_id'] = $user['class_id'];
+        return true;
+    }
+
+    return false;
+}
+
+$erreur = "";
+$connexionReussie = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['login-username']) && isset($_POST['login-passwd'])) {
+        if (verifierConnexion($_POST['login-username'], $_POST['login-passwd'])) {
+            $connexionReussie = true;
+        } else {
+            $erreur = "Identifiant ou mot de passe incorrect.";
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -43,77 +85,22 @@
 
     <img src="MEDIA/LoginPage.jpg">
   </div>
+
+  <?php if ($connexionReussie) : ?>
+    <script>
+      var submitButton = document.querySelector("#btn-submit");
+      var submitButtonText = document.querySelector("#btn-submit .button-text");
+      submitButton.classList.add("loading");
+      setTimeout(function () {
+        submitButton.classList.remove("loading");
+        submitButton.classList.add("success");
+        submitButtonText.innerHTML = "Connexion Réussie";
+        setTimeout(function () {
+          window.location.href = "index.php";
+        }, 1000);
+      }, 1000);
+    </script>
+  <?php endif; ?>
 </body>
 
 </html>
-<?php
-session_start();
-
-$bdd = new PDO('mysql:host=localhost;dbname=progesdb;charset=utf8', 'root', '');
-
-function verifierConnexion($pseudo, $password)
-{
-    global $bdd;
-
-    $hashed_pseudo = hash('sha256', $pseudo); // Hacher le pseudo avec la même méthode utilisée lors de la création de l'utilisateur
-
-    $query = $bdd->prepare("SELECT * FROM users WHERE login = :pseudo");
-    $query->bindValue(":pseudo", $hashed_pseudo, PDO::PARAM_STR);  // Lier le pseudo haché
-    $query->execute();
-    $user = $query->fetch();
-
-    // Vérifier le hachage du mot de passe
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['connected'] = true;
-        $_SESSION['pseudo'] = $pseudo;
-        $_SESSION['rank'] = $user['rank'];
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['class_id'] = $user['class_id'];
-        return true;
-    }
-
-    return false;
-}
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_POST['login-username']) && isset($_POST['login-passwd'])) {
-    ?>
-    <script>
-      var submitButton = document.querySelector("#btn-submit");
-      submitButton.classList.add("loading");
-    </script>
-    <?php
-    $pseudo = $_POST['login-username'];
-    $password = $_POST['login-passwd'];
-    if (verifierConnexion($pseudo, $password)) {
-      ?>
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          var submitButton = document.querySelector("#btn-submit");
-          var submitButtonText = document.querySelector("#btn-submit .button-text");
-          setTimeout(function () {
-            submitButton.classList.remove("loading");
-            submitButton.classList.add("success");
-            submitButtonText.innerHTML = "Connexion Réussie";
-            setTimeout(function () {
-              window.location.href = "index.php"; 
-            }, 1000);
-          }, 1000);
-        });
-      </script>
-      <?php 
-    } else {
-      $erreur = "Identifiant ou mot de passe incorrect.";
-      ?>
-      <script>
-      submitButton.classList.remove("loading");
-      </script>
-      <?php
-    }
-  }
-}
-?>
-
-
-

@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      # Le code se connecte en root sans mot de passe (config d'origine XAMPP)
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ${DB_NAME:-progesdb}
+    volumes:
+      # Import automatique du dump au premier démarrage, puis des comptes de démo
+      - ./progesdb.sql:/docker-entrypoint-initdb.d/01-progesdb.sql:ro
+      - ./seed-dummy-users.sql:/docker-entrypoint-initdb.d/02-dummy-users.sql:ro
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Pointe les connexions PDO vers le conteneur MySQL
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-progesdb}
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+
+volumes:
+  db_data:

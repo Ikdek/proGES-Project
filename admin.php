@@ -1,3 +1,4 @@
+<?php require_once "permCheck.php"; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,10 +10,10 @@
 <body>
 <header>
     <?php
-    require_once "permCheck.php";
+    require_once "navAdmin.php";
     
 
-    $bdd = new PDO('mysql:host=localhost;dbname=progesdb;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
     ?>
 </header>
 

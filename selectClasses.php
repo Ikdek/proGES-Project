@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <?php require_once "navAdmin.php"; ?>
     <form action="planningManager.php" method="get">
         <label for="classes">Sélectionnez la classe</label>
         <select id="classes" name="class_id">

@@ -1,3 +1,4 @@
+<?php require_once "permCheck.php"; ?>
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +10,7 @@
 <body>
     <?php
         require_once "db.php";
-        require_once "permCheck.php";
+        require_once "navAdmin.php";
         $query = $conn->prepare("SELECT * FROM classes");
         $query->execute();
         $classes = $query->fetchAll();

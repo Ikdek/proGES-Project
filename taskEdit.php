@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'endHour' => $endHour,
         'class_id' => $class_id
     ]);
-    header("Location: planningManager.php?class_id=$class_id.php");;
+    header("Location: planningManager.php?class_id=$class_id");
+    exit;
 }
 ?>
 
@@ -38,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+    <?php require_once "navAdmin.php"; ?>
     <h2>Add Task</h2>
     <form method="POST">
         <label for="taskDescription">Task Description</label><br>

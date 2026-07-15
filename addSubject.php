@@ -1,3 +1,19 @@
+<?php
+require_once "permCheck.php";
+require_once "db.php";
+
+// Le traitement précède toute sortie HTML, sinon la redirection serait ignorée.
+if (isset($_POST['submit'])) {
+    $nomDuSujet = isset($_POST['nomDuSujet']) ? trim($_POST['nomDuSujet']) : '';
+
+    if (!empty($nomDuSujet)) {
+        $stmt = $conn->prepare("INSERT INTO subject (name) VALUES (?)");
+        $stmt->execute([$nomDuSujet]);
+        header('Location: globalView.php');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,21 +21,7 @@
     <link rel="stylesheet" href="style/addClasses.css">
 </head>
 <body>
-    <?php
-    require_once "db.php";
-    require_once "permCheck.php";
-
-    if (isset($_POST['submit'])) {
-        $nomDuSujet = isset($_POST['nomDuSujet']) ? trim($_POST['nomDuSujet']) : '';
-
-        if (!empty($nomDuSujet)) {
-            $stmt = $conn->prepare("INSERT INTO subject (name) VALUES (?)");
-            $stmt->execute([$nomDuSujet]);
-            header('Location: globalView.php');
-            exit;
-        }
-    }
-    ?>
+    <?php require_once "navAdmin.php"; ?>
 
     <form action="" method="POST">
         <label for="nomDuSujet">Nom de la matiere:</label>

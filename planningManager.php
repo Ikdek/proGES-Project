@@ -54,6 +54,7 @@ foreach ($weekdays as $index => $day) {
 </head>
 
 <body>
+    <?php require_once "navAdmin.php"; ?>
     <div class="week-nav">
         <a class="aze" href="?week=<?= $prevWeek ?>&year=<?= $prevYear ?>&class_id=<?= $class_id ?>">Semaine
             précédente</a>

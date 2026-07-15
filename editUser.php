@@ -1,3 +1,49 @@
+<?php
+require_once "permCheck.php";
+
+$host = getenv('DB_HOST') ?: 'localhost';
+$dbUser = getenv('DB_USER') ?: 'root';
+$dbPassword = getenv('DB_PASSWORD') ?: '';
+$database = getenv('DB_NAME') ?: 'progesdb';
+$conn = new PDO("mysql:host=$host;dbname=$database", $dbUser, $dbPassword);
+
+$user = null;
+$classes = [];
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $user_id = intval($_GET['id']);
+    $query = $conn->prepare("SELECT * FROM users WHERE id = :id");
+    $query->bindValue(':id', $user_id, PDO::PARAM_INT);
+    $query->execute();
+    $user = $query->fetch();
+
+    $classesQuery = $conn->prepare("SELECT * FROM classes");
+    $classesQuery->execute();
+    $classes = $classesQuery->fetchAll();
+}
+
+// Le traitement précède toute sortie HTML, sinon la redirection serait ignorée.
+if (isset($_POST['submit']) && !empty($user)) {
+    $user_id = $user['id'];
+    $firstName = isset($_POST['firstName']) ? trim($_POST['firstName']) : '';
+    $lastName = isset($_POST['lastName']) ? trim($_POST['lastName']) : '';
+    $role = isset($_POST['role']) ? trim($_POST['role']) : '';
+    $classId = isset($_POST['class']) ? trim($_POST['class']) : '';
+
+    if (!empty($firstName) && !empty($lastName) && !empty($role) && !empty($classId)) {
+        $query = $conn->prepare("UPDATE users SET `firstName` = :firstName, `lastName` = :lastName, `rank` = :role, `class_id` = :class_id WHERE `id` = :id");
+        $query->bindValue(':id', $user_id, PDO::PARAM_INT);
+        $query->bindValue(':firstName', $firstName, PDO::PARAM_STR);
+        $query->bindValue(':lastName', $lastName, PDO::PARAM_STR);
+        $query->bindValue(':role', $role, PDO::PARAM_STR);
+        $query->bindValue(':class_id', $classId, PDO::PARAM_INT);
+        $query->execute();
+
+        header('Location: usersManage.php');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -7,49 +53,7 @@
 </head>
 
 <body>
-    <?php
-    require_once "permCheck.php";
-    $host = 'localhost';
-    $user = 'root';
-    $password = '';
-    $database = 'progesdb';
-    $conn = new PDO("mysql:host=$host;dbname=$database", $user, $password);
-
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-        $user_id = intval($_GET['id']);
-        $query = $conn->prepare("SELECT * FROM users WHERE id = :id");
-        $query->bindValue(':id', $user_id, PDO::PARAM_INT);
-        $query->execute();
-        $user = $query->fetch();
-
-        $classesQuery = $conn->prepare("SELECT * FROM classes");
-        $classesQuery->execute();
-        $classes = $classesQuery->fetchAll();
-    }
-
-    if (isset($_POST['submit'])) {
-        if (isset($user)) {
-            $user_id = $user['id'];
-            $firstName = isset($_POST['firstName']) ? trim($_POST['firstName']) : '';
-            $lastName = isset($_POST['lastName']) ? trim($_POST['lastName']) : '';
-            $role = isset($_POST['role']) ? trim($_POST['role']) : '';
-            $classId = isset($_POST['class']) ? trim($_POST['class']) : '';
-
-            if (!empty($firstName) && !empty($lastName) && !empty($role) && !empty($classId)) {
-                $query = $conn->prepare("UPDATE users SET `firstName` = :firstName, `lastName` = :lastName, `rank` = :role, `class_id` = :class_id WHERE `id` = :id");
-                $query->bindValue(':id', $user_id, PDO::PARAM_INT);
-                $query->bindValue(':firstName', $firstName, PDO::PARAM_STR);
-                $query->bindValue(':lastName', $lastName, PDO::PARAM_STR);
-                $query->bindValue(':role', $role, PDO::PARAM_STR);
-                $query->bindValue(':class_id', $classId, PDO::PARAM_INT);
-                $query->execute();
-
-                header('Location: usersManage.php');
-                exit;
-            }
-        }
-    }
-    ?>
+    <?php require_once "navAdmin.php"; ?>
 
     <form action="" method="post">
         <label for="firstName">Prénom:</label>
@@ -77,16 +81,6 @@
         <br>
         <input type="submit" name="submit" value="Mettre à jour l'utilisateur">
     </form>
-
-    <?php
-    if (isset($error)) {
-        ?>
-        <p style="color: red;">
-            <?= htmlspecialchars($error) ?>
-        </p>
-        <?php
-    }
-    ?>
 </body>
 
 </html>
