@@ -1,6 +1,7 @@
 <?php
 require_once "permCheck.php";
-$bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
+require_once __DIR__ . '/db.php';
+$bdd = dbConnection();
 
 if (!empty($_GET['mark_id'])) {
     $mark_id = $_GET['mark_id'];
@@ -26,7 +27,7 @@ if (!empty($_GET['mark_id'])) {
 <head>
     <meta charset="UTF-8">
     <title>ProGes - Editer Notes</title>
-    <link rel="stylesheet" href="style/editUser.css">
+    <link rel="stylesheet" href="STYLE/editUser.css">
 </head>
 <body>
     <?php require_once "navAdmin.php"; ?>

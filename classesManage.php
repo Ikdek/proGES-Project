@@ -4,7 +4,7 @@
 
 <head>
   <title>ProGes - Classes</title>
-  <link rel="stylesheet" href="style/classesManage.css">
+  <link rel="stylesheet" href="STYLE/classesManage.css">
 </head>
 
 <body>

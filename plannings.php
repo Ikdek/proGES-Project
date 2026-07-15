@@ -47,7 +47,7 @@ if ($week == 1) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProGes - Planning</title>
-    <link rel="stylesheet" href="style/Plannings.css">
+    <link rel="stylesheet" href="STYLE/plannings.css">
 </head>
 
 <body>

@@ -6,28 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProGes - Utilisateurs et Notes</title>
-    <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="STYLE/usersManage.css">
 </head>
 
 <body>
     <header>
         <?php
-        require_once 'db.php';
+        require_once __DIR__ . '/db.php';
+        require_once __DIR__ . '/src/functions.php';
         require_once "navAdmin.php";
 
-        $bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
+        $bdd = dbConnection();
 
         $filterClassName = isset($_GET["classFilter"]) ? $_GET["classFilter"] : "";
         $filterSubjectName = isset($_GET["subjectFilter"]) ? $_GET["subjectFilter"] : "";
         $filterMarkMin = isset($_GET["markMinFilter"]) ? $_GET["markMinFilter"] : 0;   
         $filterMarkMax = isset($_GET["markMaxFilter"]) ? $_GET["markMaxFilter"] : 20; 
-        // Interpolé dans la clause ORDER BY : restreindre aux colonnes autorisées,
-        // une valeur libre permettrait une injection SQL.
-        $sortsAutorises = ["className", "firstName", "lastName", "mark"];
-        $sortOrder = isset($_GET["sortOrder"]) && in_array($_GET["sortOrder"], $sortsAutorises, true)
-            ? $_GET["sortOrder"]
-            : "className";
+        // Interpolé dans la clause ORDER BY : un nom de colonne ne peut pas être lié,
+        // la liste blanche est donc la seule protection contre l'injection.
+        $sortOrder = sanitizeSortOrder(
+            $_GET["sortOrder"] ?? null,
+            ["className", "firstName", "lastName", "mark"],
+            "className"
+        );
 
         $classQuery = $bdd->prepare("SELECT name as className FROM classes");
         $classQuery->execute();

@@ -23,7 +23,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 <head>
     <title>ProGes - Suppression Classes</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="STYLE/deleteClasses.css">
 </head>
 
 <body>

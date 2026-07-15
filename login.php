@@ -3,13 +3,15 @@
 // ne peut plus envoyer le cookie de session et la connexion ne persiste pas.
 session_start();
 
-$bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/src/functions.php';
+$bdd = dbConnection();
 
 function verifierConnexion($pseudo, $password)
 {
     global $bdd;
 
-    $hashed_pseudo = hash('sha256', $pseudo); // Hacher le pseudo avec la même méthode utilisée lors de la création de l'utilisateur
+    $hashed_pseudo = hashLogin($pseudo); // Même hachage qu'à la création du compte (createUser.php)
 
     $query = $bdd->prepare("SELECT * FROM users WHERE login = :pseudo");
     $query->bindValue(":pseudo", $hashed_pseudo, PDO::PARAM_STR);  // Lier le pseudo haché

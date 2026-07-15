@@ -1,11 +1,7 @@
 <?php
 require_once "permCheck.php";
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$dbUser = getenv('DB_USER') ?: 'root';
-$dbPassword = getenv('DB_PASSWORD') ?: '';
-$database = getenv('DB_NAME') ?: 'progesdb';
-$conn = new PDO("mysql:host=$host;dbname=$database", $dbUser, $dbPassword);
+require_once __DIR__ . '/db.php';
 
 $user = null;
 $classes = [];

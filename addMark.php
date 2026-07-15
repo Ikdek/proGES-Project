@@ -13,7 +13,7 @@ $subjects->execute();
 
 <head>
     <title>ProGes - Ajouter des Notes</title>
-    <link rel="stylesheet" href="style/addMark.css">
+    <link rel="stylesheet" href="STYLE/addMark.css">
 </head>
 
 <body>

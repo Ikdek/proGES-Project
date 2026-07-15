@@ -27,7 +27,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 <head>
     <title>ProGes - Modifier la Classe</title>
-    <link rel="stylesheet" href="style/modifyClasses.css">
+    <link rel="stylesheet" href="STYLE/modifyClasses.css">
 </head>
 
 <body>

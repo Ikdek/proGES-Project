@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once __DIR__ . '/src/functions.php';
 require_once "permCheck.php";
 
 $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -23,16 +24,10 @@ while ($row = $stmt->fetch()) {
     $plannings[$weekdays_mapping[$row['weekday']]][date('G', strtotime($row['startHour']))][] = $row;
 }
 
-$prevWeek = $week - 1;
-$nextWeek = $week + 1;
-$prevYear = $nextYear = $year;
-if ($week == 1) {
-    $prevWeek = 52;
-    $prevYear = $year - 1;
-} elseif ($week == 52) {
-    $nextWeek = 1;
-    $nextYear = $year + 1;
-}
+// Le nombre de semaines ISO dépend de l'année (52 ou 53) : le coder en dur
+// faisait sauter la semaine 53 des années longues (2020, 2026...).
+[$prevWeek, $prevYear] = previousWeek((int) $week, (int) $year);
+[$nextWeek, $nextYear] = nextWeek((int) $week, (int) $year);
 
 $dates = [];
 foreach ($weekdays as $index => $day) {
@@ -50,7 +45,7 @@ foreach ($weekdays as $index => $day) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProGes - Modifier le Planning</title>
-    <link rel="stylesheet" href="style/Plannings.css">
+    <link rel="stylesheet" href="STYLE/plannings.css">
 </head>
 
 <body>

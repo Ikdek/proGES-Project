@@ -1,0 +1,12 @@
+parameters:
+    # Niveau 6 sur src/ et tests/ : c'est du code procédural pur, entièrement typé.
+    # Les pages de la racine ne sont pas analysées — elles mêlent PHP et HTML et
+    # partagent des variables par portée globale ($conn, $bdd), ce que PHPStan ne
+    # peut pas suivre. Elles entreront dans le périmètre à mesure de leur découpage
+    # vers src/ (voir « évolution cible » de la charte).
+    level: 6
+    paths:
+        - src
+        - tests
+    bootstrapFiles:
+        - src/functions.php

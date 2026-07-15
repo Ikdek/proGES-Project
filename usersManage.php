@@ -10,9 +10,10 @@
 <body>
     <header>
         <?php
+        require_once __DIR__ . '/db.php';
         require_once "navAdmin.php";
 
-        $bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
+        $bdd = dbConnection();
 
         $query = $bdd->prepare("SELECT users.*, classes.name as className FROM users LEFT JOIN classes ON users.class_id = classes.id");
         $query->execute();

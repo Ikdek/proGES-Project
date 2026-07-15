@@ -1,10 +1,7 @@
 <?php
 require_once "permCheck.php";
-$host = getenv('DB_HOST') ?: 'localhost';
-$user = getenv('DB_USER') ?: 'root';
-$password = getenv('DB_PASSWORD') ?: '';
-$database = getenv('DB_NAME') ?: 'progesdb';
-$conn = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/src/functions.php';
 
 function getClasses($conn) {
     $stmt = $conn->prepare("SELECT id, name FROM classes");
@@ -40,7 +37,7 @@ if (isset($_POST['create_user'])) {
 }
 
 function createUser($conn, $login, $password, $firstName, $lastName, $classId) {
-    $hashed_login = hash('sha256', $login);
+    $hashed_login = hashLogin($login);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $conn->prepare("INSERT INTO users (login, password, firstName, lastName, class_id) VALUES (?,?,?,?,?)");
     $stmt->execute([$hashed_login, $hashed_password, $firstName, $lastName, $classId]);
@@ -52,7 +49,7 @@ function createUser($conn, $login, $password, $firstName, $lastName, $classId) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProGes - Create Users</title>
-    <link rel="stylesheet" href="style/addClasses.css">
+    <link rel="stylesheet" href="STYLE/addClasses.css">
 </head>
 <body>
 <?php require_once "navAdmin.php"; ?>

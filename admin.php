@@ -5,15 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProGes - Administration</title>
-    <link rel="stylesheet" href="style/admin.css"/>
+    <link rel="stylesheet" href="STYLE/admin.css"/>
 </head>
 <body>
 <header>
     <?php
     require_once "navAdmin.php";
-    
-
-    $bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
     ?>
 </header>
 

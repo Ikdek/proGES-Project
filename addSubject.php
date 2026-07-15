@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
     <title>ProGes - Ajouter une matière</title>
-    <link rel="stylesheet" href="style/addClasses.css">
+    <link rel="stylesheet" href="STYLE/addClasses.css">
 </head>
 <body>
     <?php require_once "navAdmin.php"; ?>

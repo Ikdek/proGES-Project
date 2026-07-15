@@ -6,21 +6,21 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  PHP_VERSION: '8.1'
+
 jobs:
   php-lint:
     name: Lint PHP (syntaxe)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ['8.1']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup PHP ${{ matrix.php-version }}
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ env.PHP_VERSION }}
           extensions: pdo, pdo_mysql
 
       - name: Vérifier la syntaxe de tous les fichiers PHP
@@ -36,6 +36,98 @@ jobs:
             exit 1
           fi
           echo "Tous les fichiers PHP ont une syntaxe valide."
+
+  coding-standards:
+    name: PHP-CS-Fixer (PSR-12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --no-progress
+
+      - name: Vérifier le formatage
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  static-analysis:
+    name: PHPStan (niveau 6)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --no-progress
+
+      - name: Analyse statique
+        run: vendor/bin/phpstan analyse --no-progress
+
+  unit-tests:
+    name: Tests unitaires
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --no-progress
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --testsuite unit
+
+  integration-tests:
+    name: Tests d'intégration (contrôle d'accès)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Démarrer l'application (Apache + MySQL)
+        run: docker compose up -d --build
+
+      - name: Attendre que l'application réponde
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://localhost:8080/login.php; then
+              echo "Application prête."
+              exit 0
+            fi
+            echo "Attente de l'application... ($i)"
+            sleep 3
+          done
+          echo "::error::L'application n'a pas démarré à temps."
+          docker compose logs
+          exit 1
+
+      - name: Installer les dépendances de test
+        run: docker compose exec -T -e COMPOSER_ALLOW_SUPERUSER=1 web composer install --no-interaction --no-progress
+
+      - name: PHPUnit — intégration
+        run: docker compose exec -T -e BASE_URL=http://localhost web vendor/bin/phpunit --testsuite integration
+
+      - name: Journaux en cas d'échec
+        if: failure()
+        run: docker compose logs web
 
   sql-validation:
     name: Valider le dump SQL

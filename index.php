@@ -15,7 +15,8 @@
     if (!isset($_SESSION["user_id"])) {
         die("Veuillez vous connecter d'abord.");
     }
-    $bdd = new PDO('mysql:host=' . (getenv('DB_HOST') ?: 'localhost') . ';dbname=' . (getenv('DB_NAME') ?: 'progesdb') . ';charset=utf8', getenv('DB_USER') ?: 'root', getenv('DB_PASSWORD') ?: '');
+    require_once __DIR__ . '/db.php';
+$bdd = dbConnection();
 
     function fetchNewsData()
     {
